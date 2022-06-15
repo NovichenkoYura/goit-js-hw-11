@@ -1,0 +1,15 @@
+.search-form {
+  display: flex;
+  justify-content: center;
+}
+
+.load-more.is-hidden {
+  display: none;
+}
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
