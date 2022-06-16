@@ -14,7 +14,9 @@ let currentPage;
 
 const searchForm = document.querySelector('.search-form');
 const galleryList = document.querySelector('.gallery');
-const loadMoreBtn = document.querySelector('.load-more')
+const loadMoreBtn = document.querySelector('.load-more');
+const input = document.querySelector('input[name="searchQuery"]');
+
 loadMoreBtn.style.display = 'none';
 
 searchForm.addEventListener('submit', onFormSubmitSearchPhotos);
@@ -93,7 +95,7 @@ async function getPhotos(word) {
 async function onLoadMore() {
   try {
     currentPage += 1;
-    const keyWord = e.target[0].value;   
+    const keyWord = input.value;
     const imageAdd = await getPhotos(keyWord);   
     await renderPhotos(imageAdd);
     
