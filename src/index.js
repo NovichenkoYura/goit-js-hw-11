@@ -8,7 +8,7 @@ const API_KEY = '28025746-c4df93d18fee554bb72ff63c8';
 const BASE_URL = 'https://pixabay.com/api/';
 let resultLength;
 let totalHits;
-let currentPage;
+let currentPage = 0;
 
 
 
@@ -73,7 +73,7 @@ async function getPhotos(word) {
       }
     });
 
-    currentPage = 1;
+    currentPage += 1;
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
     
@@ -94,10 +94,10 @@ async function getPhotos(word) {
 
 async function onLoadMore() {
   try {
-    currentPage += 1;
+    // currentPage += 1;
     const keyWord = input.value;
     const imageAdd = await getPhotos(keyWord);   
-    await renderPhotos(imageAdd);
+    renderPhotos(imageAdd);
     
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
