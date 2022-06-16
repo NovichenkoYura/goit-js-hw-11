@@ -83,7 +83,7 @@ async function getPhotos(word) {
 
     return result.data.hits;    
  
-  } catch {
+  } catch (error) {
     console.log(error);
    } 
   
@@ -93,7 +93,7 @@ async function getPhotos(word) {
 async function onLoadMore() {
   try {
     currentPage += 1;
-   
+    const keyWord = e.target[0].value;   
     const imageAdd = await getPhotos(keyWord);   
     await renderPhotos(imageAdd);
     
@@ -103,7 +103,7 @@ async function onLoadMore() {
       return enoughSearchPhotos()
     }
   }
-  catch {
+  catch (error){
     console.log(error);
 
   }
