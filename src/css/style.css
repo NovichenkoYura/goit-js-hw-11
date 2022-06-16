@@ -1,6 +1,9 @@
 .search-form {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
+  background-color: rgba(68, 155, 236, 0.788);
+  text-align: center;
+  padding: 20px;
 }
 
 .load-more.is-hidden {
@@ -9,7 +12,11 @@
 
 .gallery {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 40px;
+}
+
+.ishidden {
+  display: none;
 }
