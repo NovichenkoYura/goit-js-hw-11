@@ -24,6 +24,7 @@ loadMoreBtn.addEventListener('click', onLoadMore)
 
 async function onFormSubmitSearchPhotos(e) {
   e.preventDefault()
+  galleryList.innerHTML = '';
   const keyWord = e.target[0].value;
   const photos = await getPhotos(keyWord);
   renderPhotos(photos);
@@ -33,22 +34,22 @@ async function onFormSubmitSearchPhotos(e) {
 function renderPhotos(photos) {
   const markup = photos.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
     return `
-    <div class="photo-card">
+    <div class="card">
   <a href="${largeImageURL}">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" max-width="300px"/>
+    <img class="image-card" src="${webformatURL}" alt="${tags}" loading="lazy" max-width="300px"/>
   </a>
   
-  <div class="info">
-    <p class="info-item">
+  <div class="about">
+    <p class="about-item">
       <b>Likes</b>${likes}
     </p>
-    <p class="info-item">
+    <p class="about-item">
       <b>Views</b>${views}
     </p>
-    <p class="info-item">
+    <p class="about-item">
       <b>Comments</b>${comments}
     </p>
-    <p class="info-item">
+    <p class="about-item">
       <b>Downloads</b>${downloads}
     </p>
   </div>
