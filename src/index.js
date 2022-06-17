@@ -6,9 +6,9 @@ import Notiflix from 'notiflix';
 
 const API_KEY = '28025746-c4df93d18fee554bb72ff63c8';
 const BASE_URL = 'https://pixabay.com/api/';
-let resultLength;
-let totalHits;
-let currentPage = 0;
+let resultLength = 0;
+let totalHits = 0;
+let currentPage = 1;
 
 
 
@@ -70,51 +70,54 @@ async function getPhotos(word) {
         orientation: "horizontal",
         safesearch: true,
         per_page: 40,
+        page: `${currentPage}`,
+
       }
     });
 
     currentPage += 1;
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
-    
-    
+
+
     if (totalHits < 1) {
       // loadMoreBtn.classList.add('ishidden')
       return errorSearchPhotos()
     }
 
-    return result.data.hits;    
- 
+    return result.data.hits;
+
   } catch (error) {
     console.log(error);
-   } 
-  
+  }
+
 }
 
 
 async function onLoadMore() {
   try {
-    // currentPage += 1;
-    const keyWord = input.value;
-    const imageAdd = await getPhotos(keyWord);   
-    renderPhotos(imageAdd);
     
+    const keyWord = input.value;
+    const imageAdd = await getPhotos(keyWord);
+    renderPhotos(imageAdd);
+
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
     if (resultLength >= totalHits) {
       return enoughSearchPhotos()
     }
   }
-  catch (error){
+  catch (error) {
     console.log(error);
 
   }
 }
 
 function errorSearchPhotos() {
-    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+  Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
 }
 
 function enoughSearchPhotos() {
+  loadMoreBtn.style.display = 'none';
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
 }
