@@ -82,8 +82,11 @@ async function getPhotos(word) {
 
 
     if (totalHits < 1) {
-      // loadMoreBtn.classList.add('ishidden')
       return errorSearchPhotos()
+    }
+
+    else if (resultLength >= totalHits) {
+      return enoughSearchPhotos()
     }
 
     return result.data.hits;
@@ -102,11 +105,6 @@ async function onLoadMore() {
     const imageAdd = await getPhotos(keyWord);
     renderPhotos(imageAdd);
 
-    resultLength += result.data.hits.length;
-    totalHits = result.data.totalHits;
-    if (resultLength >= totalHits) {
-      return enoughSearchPhotos()
-    }
   }
   catch (error) {
     console.log(error);
