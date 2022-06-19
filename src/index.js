@@ -9,6 +9,7 @@ const BASE_URL = 'https://pixabay.com/api/';
 let resultLength = 0;
 let totalHits = 0;
 let currentPage = 1;
+let isAllData = false;
 
 
 
@@ -24,10 +25,13 @@ loadMoreBtn.addEventListener('click', onLoadMore)
 
 async function onFormSubmitSearchPhotos(e) {
   e.preventDefault()
+  isAllData = false;
+  currentPage = 1;
   galleryList.innerHTML = '';
   const keyWord = e.target[0].value;
   const photos = await getPhotos(keyWord);
   renderPhotos(photos);
+
 }
 
 
@@ -63,6 +67,10 @@ function renderPhotos(photos) {
 async function getPhotos(word) {
 
   try {
+    if (isAllData) {
+      enoughSearchPhotos()
+      return[]
+    }
     const result = await axios.get(`${BASE_URL}`, {
       params: {
         key: API_KEY,
@@ -80,13 +88,15 @@ async function getPhotos(word) {
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
 
-
+console.log(resultLength + ' ' + totalHits)
     if (totalHits < 1) {
-      return errorSearchPhotos()
+      errorSearchPhotos()
+      return []; 
     }
 
     else if (resultLength >= totalHits) {
-      return enoughSearchPhotos()
+      isAllData = true;
+      
     }
 
     return result.data.hits;
@@ -100,9 +110,10 @@ async function getPhotos(word) {
 
 async function onLoadMore() {
   try {
-    
+    hideLoadMoreBtn();
     const keyWord = input.value;
     const imageAdd = await getPhotos(keyWord);
+    showLoadMoreBtn();
     renderPhotos(imageAdd);
 
   }
@@ -119,4 +130,12 @@ function errorSearchPhotos() {
 function enoughSearchPhotos() {
   loadMoreBtn.style.display = 'none';
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+}
+
+function hideLoadMoreBtn() {
+   loadMoreBtn.style.display = 'none'
+}
+
+function showLoadMoreBtn() {
+   loadMoreBtn.style.display = 'block'
 }
