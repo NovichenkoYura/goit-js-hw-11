@@ -1,6 +1,9 @@
 
 import axios from "axios";
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 
 
@@ -18,6 +21,8 @@ const galleryList = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 const input = document.querySelector('input[name="searchQuery"]');
 
+let gallery = new SimpleLightbox('.gallery a', { captionDelay: 250 });
+
 loadMoreBtn.style.display = 'none';
 
 searchForm.addEventListener('submit', onFormSubmitSearchPhotos);
@@ -33,7 +38,6 @@ async function onFormSubmitSearchPhotos(e) {
   renderPhotos(photos);
 
 }
-
 
 function renderPhotos(photos) {
   const markup = photos.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
@@ -61,7 +65,8 @@ function renderPhotos(photos) {
   })
     .join('');
   galleryList.insertAdjacentHTML('beforeend', markup);
-  loadMoreBtn.style.display = 'block';
+  loadMoreBtn.style.display = 'block'
+  gallery.refresh();
 }
 
 async function getPhotos(word) {
@@ -101,7 +106,9 @@ async function getPhotos(word) {
       
     }
 
+    foundNumberTotalHits()
     return result.data.hits;
+    
 
   } catch (error) {
     console.log(error);
@@ -133,7 +140,11 @@ function errorSearchPhotos() {
 function enoughSearchPhotos() {
   hideLoadMoreBtn()
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+}
+
+function foundNumberTotalHits(data) {
   
+  Notiflix.Notify.info(`Hooray! We found ${totalHits} totalHits images.`);
 }
 
 function hideLoadMoreBtn() {
@@ -143,3 +154,4 @@ function hideLoadMoreBtn() {
 function showLoadMoreBtn() {
    loadMoreBtn.style.display = 'block'
 }
+
