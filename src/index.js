@@ -69,6 +69,7 @@ async function getPhotos(word) {
   try {
     if (isAllData) {
       enoughSearchPhotos()
+      hideLoadMoreBtn()
       return[]
     }
     const result = await axios.get(`${BASE_URL}`, {
@@ -96,6 +97,7 @@ async function getPhotos(word) {
 
     else if (resultLength >= totalHits) {
       isAllData = true;
+      hideLoadMoreBtn()
       
     }
 
@@ -115,6 +117,7 @@ async function onLoadMore() {
     const imageAdd = await getPhotos(keyWord);
     showLoadMoreBtn();
     renderPhotos(imageAdd);
+   
 
   }
   catch (error) {
@@ -128,8 +131,9 @@ function errorSearchPhotos() {
 }
 
 function enoughSearchPhotos() {
-  loadMoreBtn.style.display = 'none';
+  hideLoadMoreBtn()
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+  
 }
 
 function hideLoadMoreBtn() {
