@@ -88,7 +88,7 @@ async function getPhotos(word) {
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
 
-console.log(resultLength + ' ' + totalHits)
+
     if (totalHits < 1) {
       errorSearchPhotos()
       return []; 
