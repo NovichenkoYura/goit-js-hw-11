@@ -30,8 +30,10 @@ loadMoreBtn.addEventListener('click', onLoadMore)
 
 async function onFormSubmitSearchPhotos(e) {
   e.preventDefault()
+  hideLoadMoreBtn()
   isAllData = false;
   currentPage = 1;
+  resultLength = 0;
   galleryList.innerHTML = '';
   const keyWord = e.target[0].value;
   const photos = await getPhotos(keyWord);
@@ -65,7 +67,7 @@ function renderPhotos(photos) {
   })
     .join('');
   galleryList.insertAdjacentHTML('beforeend', markup);
-  loadMoreBtn.style.display = 'block'
+  showLoadMoreBtn();
   gallery.refresh();
 }
 
@@ -94,6 +96,8 @@ async function getPhotos(word) {
     resultLength += result.data.hits.length;
     totalHits = result.data.totalHits;
 
+    console.log('rendered: ' + resultLength + ' whole collection: ' + totalHits)
+
 
     if (totalHits < 1) {
       errorSearchPhotos()
@@ -102,11 +106,13 @@ async function getPhotos(word) {
 
     else if (resultLength >= totalHits) {
       isAllData = true;
-      hideLoadMoreBtn()
-      
+
     }
 
-    foundNumberTotalHits()
+    else if (currentPage = 1) {
+      foundNumberTotalHits()
+    }
+    
     return result.data.hits;
     
 
@@ -116,22 +122,48 @@ async function getPhotos(word) {
 
 }
 
-
 async function onLoadMore() {
   try {
+    if (resultLength < totalHits) {
     hideLoadMoreBtn();
     const keyWord = input.value;
     const imageAdd = await getPhotos(keyWord);
     showLoadMoreBtn();
     renderPhotos(imageAdd);
+    }
+
+    if (resultLength >= totalHits) {
+      isAllData = true;
+      hideLoadMoreBtn();
+      return;
+    }
    
 
   }
   catch (error) {
     console.log(error);
-
   }
 }
+
+
+// async function onLoadMore() {
+//   try {
+//     hideLoadMoreBtn();
+//     const keyWord = input.value;
+//     const imageAdd = await getPhotos(keyWord);
+//     showLoadMoreBtn();
+//     renderPhotos(imageAdd);
+//     if (resultLength >= totalHits) {
+//       isAllData = true;
+//       hideLoadMoreBtn();      
+//     }
+   
+
+//   }
+//   catch (error) {
+//     console.log(error);
+//   }
+// }
 
 function errorSearchPhotos() {
   Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
@@ -142,8 +174,7 @@ function enoughSearchPhotos() {
   Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
 }
 
-function foundNumberTotalHits(data) {
-  
+function foundNumberTotalHits() {  
   Notiflix.Notify.info(`Hooray! We found ${totalHits} totalHits images.`);
 }
 
