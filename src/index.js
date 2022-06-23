@@ -109,7 +109,7 @@ async function getPhotos(word) {
 
     }
 
-    else if (currentPage = 1) {
+    else if (currentPage === 1) {
       foundNumberTotalHits()
     }
     
