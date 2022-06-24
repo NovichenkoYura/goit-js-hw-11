@@ -29,6 +29,7 @@ searchForm.addEventListener('submit', onFormSubmitSearchPhotos);
 loadMoreBtn.addEventListener('click', onLoadMore)
 
 async function onFormSubmitSearchPhotos(e) {
+ 
   e.preventDefault()
   hideLoadMoreBtn()
   isAllData = false;
@@ -38,7 +39,11 @@ async function onFormSubmitSearchPhotos(e) {
   const keyWord = e.target[0].value;
   const photos = await getPhotos(keyWord);
   renderPhotos(photos);
+  if (resultLength < totalHits) {  
+  showLoadMoreBtn();
+  }
 
+  
 }
 
 function renderPhotos(photos) {
@@ -67,7 +72,6 @@ function renderPhotos(photos) {
   })
     .join('');
   galleryList.insertAdjacentHTML('beforeend', markup);
-  showLoadMoreBtn();
   gallery.refresh();
 }
 
@@ -106,6 +110,7 @@ async function getPhotos(word) {
 
     else if (resultLength >= totalHits) {
       isAllData = true;
+      enoughSearchPhotos()
 
     }
 
@@ -123,7 +128,7 @@ async function getPhotos(word) {
 }
 
 async function onLoadMore() {
-  try {
+  try {    
     if (resultLength < totalHits) {
     hideLoadMoreBtn();
     const keyWord = input.value;
@@ -146,27 +151,11 @@ async function onLoadMore() {
 }
 
 
-// async function onLoadMore() {
-//   try {
-//     hideLoadMoreBtn();
-//     const keyWord = input.value;
-//     const imageAdd = await getPhotos(keyWord);
-//     showLoadMoreBtn();
-//     renderPhotos(imageAdd);
-//     if (resultLength >= totalHits) {
-//       isAllData = true;
-//       hideLoadMoreBtn();      
-//     }
-   
-
-//   }
-//   catch (error) {
-//     console.log(error);
-//   }
-// }
-
 function errorSearchPhotos() {
+  
+  hideLoadMoreBtn()
   Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+  
 }
 
 function enoughSearchPhotos() {
